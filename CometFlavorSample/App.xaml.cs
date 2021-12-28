@@ -1,16 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using CometFlavorSample.Views;
+using Prism.Ioc;
 
 namespace CometFlavorSample;
 
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
-public partial class App : Application
+public partial class App
 {
+    /// <summary>
+    /// 型の登録
+    /// </summary>
+    protected override void RegisterTypes(IContainerRegistry containerRegistry)
+    {
+    }
+
+    /// <summary>
+    /// シェルオブジェクトの生成
+    /// </summary>
+    protected override Window CreateShell()
+    {
+        return this.Container.Resolve<MainWindow>();
+    }
 }
