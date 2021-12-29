@@ -1,0 +1,286 @@
+﻿<UserControl x:Class="CometFlavorSample.Views.ConvertersPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:comet="http://schemas.cometflavor.toras9000/"
+             xmlns:local="clr-namespace:CometFlavorSample.Views"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d" 
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             d:DataContext="{d:DesignInstance {x:Type vm:ConvertersPanelViewModel}}">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger SourceObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" EventName="Closed">
+            <comet:ObjectDisposeAction Object="{Binding}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <StackPanel Orientation="Vertical">
+        <!-- BooleanToVisibilityConverter -->
+        <TextBlock Text="BooleanToVisibilityConverter" />
+        <Grid Margin="20,0,20,0">
+            <Grid.Resources>
+                <comet:BooleanToVisibilityConverter x:Key="BoolToVisibleOrCollapse" InvisibleToHidden="False" ReverseLogic="False" />
+                <comet:BooleanToVisibilityConverter x:Key="BoolToVisibleOrHidden" InvisibleToHidden="True" ReverseLogic="False" />
+                <comet:BooleanToVisibilityConverter x:Key="BoolToCollapseOrVisible" InvisibleToHidden="False" ReverseLogic="True" />
+                <comet:BooleanToVisibilityConverter x:Key="BoolToHiddenOrVisible" InvisibleToHidden="True" ReverseLogic="True" />
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Source -->
+            <CheckBox Grid.Column="0" Grid.Row="0" Grid.RowSpan="4"
+                      VerticalAlignment="Center"
+                      IsChecked="{Binding BooleanToVisibilitySource.Value}"
+                      Content="Source Boolean" />
+
+            <!-- Visible or Collapse -->
+            <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal">
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <Rectangle Width="10" Height="10" Margin="2"
+                               Fill="PaleGreen"
+                               Visibility="{Binding BooleanToVisibilitySource.Value, Converter={StaticResource BoolToVisibleOrCollapse}, Mode=OneWay}" />
+                </Border>
+                <TextBlock Margin="4,0,0,0" Text="Visible or Collapse" />
+            </StackPanel>
+            <!-- Visible or Hidden -->
+            <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Horizontal">
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <Rectangle Width="10" Height="10" Margin="2"
+                               Fill="PaleGreen"
+                               Visibility="{Binding BooleanToVisibilitySource.Value, Converter={StaticResource BoolToVisibleOrHidden}, Mode=OneWay}" />
+                </Border>
+                <TextBlock Margin="4,0,0,0" Text="Visible or Hidden" />
+            </StackPanel>
+            <!-- Visible or Collapse, ReverseLogic -->
+            <StackPanel Grid.Column="2" Grid.Row="2" Orientation="Horizontal">
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <Rectangle Width="10" Height="10" Margin="2"
+                               Fill="PaleGreen"
+                               Visibility="{Binding BooleanToVisibilitySource.Value, Converter={StaticResource BoolToCollapseOrVisible}, Mode=OneWay}" />
+                </Border>
+                <TextBlock Margin="4,0,0,0" Text="Visible or Collapse, ReverseLogic" />
+            </StackPanel>
+            <!-- Visible or Hidden, ReverseLogic -->
+            <StackPanel Grid.Column="2" Grid.Row="3" Orientation="Horizontal">
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <Rectangle Width="10" Height="10" Margin="2"
+                               Fill="PaleGreen"
+                               Visibility="{Binding BooleanToVisibilitySource.Value, Converter={StaticResource BoolToHiddenOrVisible}, Mode=OneWay}" />
+                </Border>
+                <TextBlock Margin="4,0,0,0" Text="Visible or Hidden, ReverseLogic" />
+            </StackPanel>
+        </Grid>
+        <Rectangle Height="12" />
+
+        <!-- InvertBooleanConverter -->
+        <TextBlock Text="InvertBooleanConverter" />
+        <Grid Margin="20,0,20,0">
+            <Grid.Resources>
+                <comet:InvertBooleanConverter x:Key="InvertBoolean" />
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Source -->
+            <CheckBox Grid.Column="0" Grid.Row="0" Grid.RowSpan="4"
+                      VerticalAlignment="Center"
+                      IsChecked="{Binding InvertBooleanSource.Value}"
+                      Content="Source Boolean" />
+
+            <!-- Invert -->
+            <CheckBox Grid.Column="2" Grid.Row="0" Grid.RowSpan="4"
+                      VerticalAlignment="Center"
+                      IsHitTestVisible="False" IsTabStop="False"
+                      IsChecked="{Binding InvertBooleanSource.Value, Converter={StaticResource InvertBoolean}, Mode=OneWay}"
+                      Content="Invert Boolean" />
+        </Grid>
+        <Rectangle Height="12" />
+
+        <!-- ObjectReferenceToBooleanConverter, ObjectReferenceToVisibilityConverter -->
+        <TextBlock Text="ObjectReferenceToBooleanConverter, ObjectReferenceToVisibilityConverter" />
+        <Grid Margin="20,0,20,0">
+            <Grid.Resources>
+                <comet:ObjectReferenceToBooleanConverter x:Key="ExistIsTrue" ReverseLogic="False" />
+                <comet:ObjectReferenceToBooleanConverter x:Key="ExistIsFalse" ReverseLogic="True" />
+                <comet:ObjectReferenceToVisibilityConverter x:Key="ExistIsVisible" ReverseLogic="False" InvisibleToHidden="True" />
+                <comet:ObjectReferenceToVisibilityConverter x:Key="ExistIsHidden" ReverseLogic="True" InvisibleToHidden="True" />
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Source -->
+            <ListBox Grid.Column="0" Grid.Row="0"
+                     ItemsSource="{Binding ObjectReferenceSource, Mode=OneWay}"
+                     SelectedItem="{Binding ObjectReferenceSelected.Value}"/>
+
+            <!-- ObjectReferenceToVisibility -->
+            <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center" Text="Selected:" />
+                <TextBlock VerticalAlignment="Center"
+                           Visibility="{Binding ObjectReferenceSelected.Value, Converter={StaticResource ExistIsVisible}, Mode=OneWay}"
+                           Text="{Binding ObjectReferenceSelected.Value, Mode=OneWay}" />
+                <TextBlock VerticalAlignment="Center"
+                           Visibility="{Binding ObjectReferenceSelected.Value, Converter={StaticResource ExistIsHidden}, Mode=OneWay}"
+                           Text="(null)" />
+            </StackPanel>
+
+            <!-- ObjectReferenceToBoolean -->
+            <CheckBox Grid.Column="4" Grid.Row="0" Grid.RowSpan="4"
+                      VerticalAlignment="Center"
+                      IsHitTestVisible="False" IsTabStop="False"
+                      IsChecked="{Binding ObjectReferenceSelected.Value, Converter={StaticResource ExistIsTrue}, Mode=OneWay}"
+                      Content="Not Null" />
+
+        </Grid>
+        <Rectangle Height="12" />
+
+        <!-- BooleanCombineConverter, BooleanCombineToVisibilityConverter -->
+        <TextBlock Text="BooleanCombineConverter, BooleanCombineToVisibilityConverter" />
+        <Grid Margin="20,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.Resources>
+                <comet:BooleanCombineConverter x:Key="IsAllTrue" Mode="AllTrue" />
+                <comet:BooleanCombineConverter x:Key="IsAllFalse" Mode="AllFalse" />
+                <comet:BooleanCombineConverter x:Key="IsAnyTrue" Mode="AnyTrue" />
+                <comet:BooleanCombineConverter x:Key="IsAnyFalse" Mode="AnyFalse" />
+                <comet:BooleanCombineToVisibilityConverter x:Key="IsAllTrueVisible"  Mode="AllTrue"  InvisibleToHidden="True" />
+                <comet:BooleanCombineToVisibilityConverter x:Key="IsAllFalseVisible" Mode="AllFalse" InvisibleToHidden="True" />
+                <comet:BooleanCombineToVisibilityConverter x:Key="IsAnyTrueVisible"  Mode="AnyTrue"  InvisibleToHidden="True" />
+                <comet:BooleanCombineToVisibilityConverter x:Key="IsAnyFalseVisible" Mode="AnyFalse" InvisibleToHidden="True" />
+                <Style TargetType="{x:Type Rectangle}">
+                    <Setter Property="Width" Value="12" />
+                    <Setter Property="Height" Value="12" />
+                    <Setter Property="Fill" Value="PaleGreen" />
+                    <Setter Property="Margin" Value="10,0,0,0" />
+                </Style>
+            </Grid.Resources>
+
+            <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding BooleanCombineSource1.Value}" Content="Boolean1" />
+            <CheckBox Grid.Column="0" Grid.Row="1" IsChecked="{Binding BooleanCombineSource2.Value}" Content="Boolean2" />
+            <CheckBox Grid.Column="0" Grid.Row="2" IsChecked="{Binding BooleanCombineSource3.Value}" Content="Boolean3" />
+            <CheckBox Grid.Column="0" Grid.Row="3" IsChecked="{Binding BooleanCombineSource4.Value}" Content="Boolean4" />
+
+            <Rectangle Grid.Column="1" Grid.Row="0">
+                <Rectangle.Visibility>
+                    <MultiBinding Converter="{StaticResource IsAllTrueVisible}">
+                        <Binding Path="BooleanCombineSource1.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource2.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource3.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource4.Value" Mode="OneWay" />
+                    </MultiBinding>
+                </Rectangle.Visibility>
+            </Rectangle>
+            <Rectangle Grid.Column="1" Grid.Row="1">
+                <Rectangle.Visibility>
+                    <MultiBinding Converter="{StaticResource IsAllFalseVisible}">
+                        <Binding Path="BooleanCombineSource1.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource2.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource3.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource4.Value" Mode="OneWay" />
+                    </MultiBinding>
+                </Rectangle.Visibility>
+            </Rectangle>
+            <Rectangle Grid.Column="1" Grid.Row="2">
+                <Rectangle.Visibility>
+                    <MultiBinding Converter="{StaticResource IsAnyTrueVisible}">
+                        <Binding Path="BooleanCombineSource1.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource2.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource3.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource4.Value" Mode="OneWay" />
+                    </MultiBinding>
+                </Rectangle.Visibility>
+            </Rectangle>
+            <Rectangle Grid.Column="1" Grid.Row="3">
+                <Rectangle.Visibility>
+                    <MultiBinding Converter="{StaticResource IsAnyFalseVisible}">
+                        <Binding Path="BooleanCombineSource1.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource2.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource3.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource4.Value" Mode="OneWay" />
+                    </MultiBinding>
+                </Rectangle.Visibility>
+            </Rectangle>
+
+            <CheckBox Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" IsHitTestVisible="False" IsTabStop="False" Content="IsAllTrue">
+                <CheckBox.IsChecked>
+                    <MultiBinding Converter="{StaticResource IsAllTrue}">
+                        <Binding Path="BooleanCombineSource1.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource2.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource3.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource4.Value" Mode="OneWay" />
+                    </MultiBinding>
+                </CheckBox.IsChecked>
+            </CheckBox>
+            <CheckBox Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" IsHitTestVisible="False" IsTabStop="False" Content="IsAllFalse">
+                <CheckBox.IsChecked>
+                    <MultiBinding Converter="{StaticResource IsAllFalse}">
+                        <Binding Path="BooleanCombineSource1.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource2.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource3.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource4.Value" Mode="OneWay" />
+                    </MultiBinding>
+                </CheckBox.IsChecked>
+            </CheckBox>
+            <CheckBox Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" IsHitTestVisible="False" IsTabStop="False" Content="IsAnyTrue">
+                <CheckBox.IsChecked>
+                    <MultiBinding Converter="{StaticResource IsAnyTrue}">
+                        <Binding Path="BooleanCombineSource1.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource2.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource3.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource4.Value" Mode="OneWay" />
+                    </MultiBinding>
+                </CheckBox.IsChecked>
+            </CheckBox>
+            <CheckBox Grid.Column="2" Grid.Row="3" VerticalAlignment="Center" IsHitTestVisible="False" IsTabStop="False" Content="IsAnyFalse">
+                <CheckBox.IsChecked>
+                    <MultiBinding Converter="{StaticResource IsAnyFalse}">
+                        <Binding Path="BooleanCombineSource1.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource2.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource3.Value" Mode="OneWay" />
+                        <Binding Path="BooleanCombineSource4.Value" Mode="OneWay" />
+                    </MultiBinding>
+                </CheckBox.IsChecked>
+            </CheckBox>
+
+        </Grid>
+        <Rectangle Height="12" />
+    </StackPanel>
+</UserControl>

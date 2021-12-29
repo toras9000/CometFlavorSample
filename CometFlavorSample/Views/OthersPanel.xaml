@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="CometFlavorSample.Views.OthersPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:comet="http://schemas.cometflavor.toras9000/"
+             xmlns:local="clr-namespace:CometFlavorSample.Views"
+             xmlns:vm="clr-namespace:CometFlavorSample.ViewModels"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d" 
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             d:DataContext="{d:DesignInstance {x:Type vm:OthersPanelViewModel}}">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger SourceObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" EventName="Closed">
+            <comet:ObjectDisposeAction Object="{Binding}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <StackPanel Orientation="Vertical">
+        <!-- RelativePathFrom -->
+        <TextBlock Text="RelativePathFrom" />
+        <StackPanel Orientation="Vertical" Margin="20,0,20,0">
+            <StackPanel.Resources>
+                <comet:DragEventArgsToFilePathConverter x:Key="DropToFilePath" ConvertToUri="False" />
+            </StackPanel.Resources>
+
+            <TextBlock VerticalAlignment="Center" Text="ベースディレクトリ" />
+            <DockPanel Height="50" Background="Transparent">
+                <i:Interaction.Triggers>
+                    <comet:DragDropTerigger ParameterConverter="{StaticResource DropToFilePath}">
+                        <comet:InvokeCommandAction Command="{Binding DropBaseTargetCommand}" />
+                    </comet:DragDropTerigger>
+                </i:Interaction.Triggers>
+                <Border DockPanel.Dock="Left" Width="200" BorderBrush="Black" BorderThickness="1">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="ファイルをドロップ" />
+                </Border>
+                <Rectangle Width="20" />
+                <TextBox IsReadOnly="True"
+                         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                         VerticalContentAlignment="Center"
+                         Text="{Binding BaseTarget.Value, Mode=OneWay}" />
+            </DockPanel>
+            <Rectangle Height="12" />
+
+            <TextBlock VerticalAlignment="Center" Text="相対取得ファイル/ディレクトリ" />
+            <DockPanel Height="50" Background="Transparent">
+                <i:Interaction.Triggers>
+                    <comet:DragDropTerigger ParameterConverter="{StaticResource DropToFilePath}">
+                        <comet:InvokeCommandAction Command="{Binding DropRelativeTargetCommand}" />
+                    </comet:DragDropTerigger>
+                </i:Interaction.Triggers>
+                <Border DockPanel.Dock="Left" Width="200" BorderBrush="Black" BorderThickness="1">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="ファイルをドロップ" />
+                </Border>
+                <Rectangle Width="20" />
+                <TextBox IsReadOnly="True"
+                         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                         VerticalContentAlignment="Center"
+                         Text="{Binding RelativeTarget.Value, Mode=OneWay}" />
+            </DockPanel>
+            <Rectangle Height="12" />
+
+        </StackPanel>
+        <Rectangle Height="12" />
+
+    </StackPanel>
+
+</UserControl>

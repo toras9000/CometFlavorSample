@@ -1,0 +1,129 @@
+﻿<UserControl x:Class="CometFlavorSample.Views.InteractionsPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:comet="http://schemas.cometflavor.toras9000/"
+             xmlns:local="clr-namespace:CometFlavorSample.Views"
+             xmlns:vm="clr-namespace:CometFlavorSample.ViewModels"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d" 
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             d:DataContext="{d:DesignInstance {x:Type vm:InteractionsPanelViewModel}}">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger SourceObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" EventName="Closed">
+            <comet:ObjectDisposeAction Object="{Binding}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <StackPanel Orientation="Vertical">
+        <!-- DragDropTerigger -->
+        <TextBlock Text="DragDropTerigger" />
+        <StackPanel Orientation="Vertical" Margin="20,0,20,0">
+            <StackPanel.Resources>
+                <comet:DragEventArgsToFilePathConverter x:Key="DropToFilePath" ConvertToUri="False" />
+                <comet:DragEventArgsToUrlConverter x:Key="DropToUrl" ConvertToUri="False" />
+            </StackPanel.Resources>
+
+            <!-- ファイルドロップ -->
+            <DockPanel Height="50">
+                <!-- 透明でいいので背景を指定しないと受け入れ可能にならない -->
+                <Border DockPanel.Dock="Left" Width="200" BorderBrush="Black" BorderThickness="1" Background="Transparent">
+                    <i:Interaction.Triggers>
+                        <!-- ファイルドロップをトリガにしてコマンド呼び出し。専用インターフェースを実装したコンバータから受け入れ書式指定。 -->
+                        <comet:DragDropTerigger ParameterConverter="{StaticResource DropToFilePath}">
+                            <comet:InvokeCommandAction Command="{Binding FileDropCommand}" />
+                        </comet:DragDropTerigger>
+                    </i:Interaction.Triggers>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="ファイルをドロップ" />
+                </Border>
+                <TextBlock DockPanel.Dock="Left" Width="40" TextAlignment="Center" VerticalAlignment="Center" Text="→" />
+                <TextBox IsReadOnly="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Text="{Binding FileDropResult.Value, Mode=OneWay}" />
+            </DockPanel>
+            <Rectangle Height="12" />
+            <!-- URLドロップ -->
+            <DockPanel Height="50">
+                <!-- 透明でいいので背景を指定しないと受け入れ可能にならない -->
+                <Border DockPanel.Dock="Left" Width="200" BorderBrush="Black" BorderThickness="1" Background="Transparent">
+                    <i:Interaction.Triggers>
+                        <!-- ブラウザからのURLドロップをトリガにしてコマンド呼び出し。専用インターフェースを実装したコンバータから受け入れ書式指定。 -->
+                        <comet:DragDropTerigger ParameterConverter="{StaticResource DropToUrl}">
+                            <comet:InvokeCommandAction Command="{Binding UrlDropCommand}" />
+                        </comet:DragDropTerigger>
+                    </i:Interaction.Triggers>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="URLをドロップ" />
+                </Border>
+                <TextBlock DockPanel.Dock="Left" Width="40" TextAlignment="Center" VerticalAlignment="Center" Text="→" />
+                <TextBox IsReadOnly="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Text="{Binding UrlDropResult.Value, Mode=OneWay}" />
+            </DockPanel>
+        </StackPanel>
+        <Rectangle Height="12" />
+
+        <!-- ViewValidationErrorBehavior  -->
+        <TextBlock Text="ViewValidationErrorBehavior " />
+        <StackPanel Orientation="Horizontal" Margin="20,0,20,0">
+            <StackPanel.Resources>
+                <comet:BooleanToVisibilityConverter x:Key="TrueIsVisible" ReverseLogic="False" />
+                <comet:BooleanToVisibilityConverter x:Key="FalseIsVisible" ReverseLogic="True" />
+            </StackPanel.Resources>
+            <TextBlock VerticalAlignment="Center" Text="数値入力" />
+            <Rectangle Width="8" />
+            <TextBox VerticalAlignment="Center" Width="100" Text="{Binding InputNumber.Value, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}">
+                <i:Interaction.Behaviors>
+                    <comet:ViewValidationErrorBehavior HasViewError="{Binding InputError.Value}" />
+                </i:Interaction.Behaviors>
+            </TextBox>
+            <Rectangle Width="8" />
+            <TextBlock Width="40" TextAlignment="Center" VerticalAlignment="Center" Text="→" />
+            <Rectangle Width="8" />
+
+            <TextBlock VerticalAlignment="Center" Text="Error detected" Visibility="{Binding InputError.Value, Converter={StaticResource TrueIsVisible}}" />
+            <TextBlock VerticalAlignment="Center" Text="No Error" Visibility="{Binding InputError.Value, Converter={StaticResource FalseIsVisible}}" />
+        </StackPanel>
+        <Rectangle Height="12" />
+
+        <!-- ReactiveTrigger  -->
+        <TextBlock Text="ViewValidationErrorBehavior " />
+        <StackPanel Orientation="Horizontal" Margin="20,0,20,0">
+            <StackPanel.Resources>
+                <XmlDataProvider x:Key="SampleItems" XPath="/SampleData/Item">
+                    <x:XData>
+                        <SampleData xmlns="">
+                            <Item>AAA</Item>
+                            <Item>BBB</Item>
+                            <Item>CCC</Item>
+                        </SampleData>
+                    </x:XData>
+                </XmlDataProvider>
+            </StackPanel.Resources>
+            <ListBox VerticalAlignment="Center" Width="100"
+                      ItemsSource="{Binding Source={StaticResource SampleItems}}"
+                      SelectedItem="{Binding TriggerSource.Value}" />
+            <TextBlock Width="40" TextAlignment="Center" VerticalAlignment="Center" Text="→" />
+            <Rectangle x:Name="AnimationRect" Width="12" Height="12" Fill="PaleGreen">
+                <Rectangle.RenderTransform>
+                    <RotateTransform CenterX="6" CenterY="6" />
+                </Rectangle.RenderTransform>
+                <i:Interaction.Triggers>
+                    <comet:ReactiveTrigger Source="{Binding TriggerSource}">
+                        <i:ControlStoryboardAction ControlStoryboardOption="Play">
+                            <i:ControlStoryboardAction.Storyboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="AnimationRect"
+                                                     Storyboard.TargetProperty="RenderTransform.Angle"
+                                                     From="0" To="90" Duration="00:00:00.2" />
+                                </Storyboard>
+                            </i:ControlStoryboardAction.Storyboard>
+                        </i:ControlStoryboardAction>
+                    </comet:ReactiveTrigger>
+                </i:Interaction.Triggers>
+            </Rectangle>
+        </StackPanel>
+        <Rectangle Height="12" />
+
+    </StackPanel>
+</UserControl>
