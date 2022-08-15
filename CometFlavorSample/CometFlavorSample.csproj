@@ -8,10 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CometFlavor" Version="0.0.5" />
-    <PackageReference Include="CometFlavor.Wpf" Version="0.0.7" />
+    <PackageReference Include="CometFlavor" Version="0.4.0" />
+    <PackageReference Include="CometFlavor.Wpf" Version="0.1.0" />
     <PackageReference Include="Prism.Unity" Version="8.1.97" />
-    <PackageReference Include="ReactiveProperty.WPF" Version="8.0.3" />
+    <PackageReference Include="ReactiveProperty.WPF" Version="8.1.2" />
   </ItemGroup>
 
 </Project>
