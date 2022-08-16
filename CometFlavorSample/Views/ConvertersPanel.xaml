@@ -7,6 +7,7 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:comet="http://schemas.cometflavor.toras9000/"
              xmlns:local="clr-namespace:CometFlavorSample.Views"
+             xmlns:vm="clr-namespace:CometFlavorSample.ViewModels"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignWidth="800"
